@@ -16,11 +16,13 @@ class Board {
     
 public:
     Board();
+    void movePiece(int currentX, int currentY, int newX, int newY);
     
-protected:
+private:
     Piece board[BOARD_LENGTH][BOARD_LENGTH];
     void initializePieces();
     
+    int validMove(int currentX, int currentY, int newX, int newY);
 };
 
 #endif /* Board_h */
