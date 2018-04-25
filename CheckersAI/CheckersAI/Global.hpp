@@ -6,8 +6,8 @@
 //  Copyright © 2018 Kenny Wang. All rights reserved.
 //
 
-#ifndef Global_h
-#define Global_h
+#ifndef Global_hpp
+#define Global_hpp
 
 const int BOARD_LENGTH = 8;
 

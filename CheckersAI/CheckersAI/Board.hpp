@@ -6,10 +6,10 @@
 //  Copyright © 2018 Kenny Wang. All rights reserved.
 //
 
-#ifndef Board_h
-#define Board_h
+#ifndef Board_hpp
+#define Board_hpp
 
-#include "Global.h"
+#include "Global.hpp"
 #include <stdio.h>
 
 class Board {

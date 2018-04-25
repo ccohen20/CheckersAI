@@ -6,7 +6,7 @@
 //  Copyright © 2018 Kenny Wang. All rights reserved.
 //
 
-#include "Board.h"
+#include "Board.hpp"
 #include <cstdlib>
 #include <iostream>
 
