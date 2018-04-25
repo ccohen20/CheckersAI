@@ -11,8 +11,7 @@
 
 const int BOARD_LENGTH = 8;
 
-
-enum Piece {
+enum class Piece {
     EMPTY,
     WHITE, WHITE_KING,
     BLACK, BLACK_KING

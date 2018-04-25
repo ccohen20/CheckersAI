@@ -12,35 +12,55 @@
 
 void Board::initializePieces() {
     
-    //add in white pieces
+    //adds in white pieces
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < BOARD_LENGTH; j++) {
+            if ((i + j) % 2 == 0) {
+                board[i][j] = Piece::WHITE;
+            }
+        }
+    }
+
+    /* Old add in white pieces (discuss this)
     for (int i=0; i<BOARD_LENGTH; i+=2) {
         
         for (int j=0; j<3; j+=2) {
-            newBoard[i][j] = WHITE;
+            board[i][j] = WHITE;
         }
     }
     
     for (int i=1; i<BOARD_LENGTH; i+=2) {
-        newBoard[i][1] = WHITE;
-    }
+        board[i][1] = WHITE;
+    }*/
     
+    //adds black pieces
+    for (int i = BOARD_LENGTH - 1; i > BOARD_LENGTH - 4; i--) {
+        for (int j = 0; j < BOARD_LENGTH; j++) {
+            if ((i + j) % 2 == 0) {
+                board[i][j] = Piece::BLACK;
+            }
+        }
+    }
+
+    /* old add black pieces (dicsuss this)
     for (int i=1; i<BOARD_LENGTH; i+=2) {
         for (int j=5; j<BOARD_LENGTH; j+=2) {
-            newBoard[i][j] = BLACK;
+            board[i][j] = BLACK;
         }
     }
     
     for (int i=0; i<BOARD_LENGTH; i+=2) {
-        newBoard[i][6] = BLACK;
-    }
+        board[i][6] = BLACK;
+    }*/
 }
 
+//constructor
+//creates empty board and the puts pieces in correct positions
 Board::Board() {
-    
     for(int i=0; i<BOARD_LENGTH; i++) {
         for(int j=0; i<BOARD_LENGTH; j++) {
             
-            newBoard[i][j] = EMPTY;
+            board[i][j] = Piece::EMPTY;
         }
     }
     initializePieces();

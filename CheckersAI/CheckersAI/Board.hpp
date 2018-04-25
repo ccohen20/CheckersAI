@@ -16,10 +16,10 @@ class Board {
     
 public:
     Board();
-    void initializePieces();
     
 protected:
-    Piece newBoard[BOARD_LENGTH][BOARD_LENGTH];
+    Piece board[BOARD_LENGTH][BOARD_LENGTH];
+    void initializePieces();
     
 };
 
