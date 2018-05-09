@@ -15,7 +15,7 @@
 //creates empty board and the puts pieces in correct positions
 Board::Board() {
     for(int i=0; i<BOARD_LENGTH; i++) {
-        for(int j=0; i<BOARD_LENGTH; j++) {
+        for(int j=0; j<BOARD_LENGTH; j++) {
             
             board[i][j] = EMPTY;
         }
@@ -47,7 +47,7 @@ void Board::initializePieces() {
 //moves piece from specified tile to specified tile
 void Board::movePiece(int currentX, int currentY, int newX, int newY) {
     //if empty piece is on the tile, we don't want to do anything (maybe throw an error?)
-    if (board[currentX][currentY] == EMPTY) {
+    if (board[currentY][currentX] == EMPTY) {
 
     }
     //if the move is not valid, we don't want to do anything (maybe throw an error?)
@@ -56,8 +56,8 @@ void Board::movePiece(int currentX, int currentY, int newX, int newY) {
     }
     //otherwise, the move is valid, and we update board
     else {
-        board[newX][newY] = board[currentX][currentY];
-        board[currentX][currentY] = EMPTY;
+        board[newY][newX] = board[currentY][currentX];
+        board[currentY][currentX] = EMPTY;
     }
 }
 
@@ -77,10 +77,10 @@ void Board::printBoard() {
 bool Board::validMove(int currentX, int currentY, int newX, int newY) {
     
     //stores value for simplicity
-    Piece piece = board[currentX][currentY];
+    Piece piece = board[currentY][currentX];
 
     //if a piece is on the passed destination, cannot move there
-    if (board[newX][newY] != EMPTY) {
+    if (board[newY][newX] != EMPTY) {
         return false;
     }
 
@@ -119,7 +119,7 @@ bool Board::validMove(int currentX, int currentY, int newX, int newY) {
         int changeY = newY - currentY;
         int oppX = currentX + changeX;
         int oppY = currentY + changeY;
-        if (board[oppX][oppY] != opp || board[oppX][oppY] != oppKing) {
+        if (board[oppY][oppX] != opp || board[oppY][oppX] != oppKing) {
             return false;
         }
     }
