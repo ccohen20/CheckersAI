@@ -17,7 +17,7 @@ Board::Board() {
     for(int i=0; i<BOARD_LENGTH; i++) {
         for(int j=0; i<BOARD_LENGTH; j++) {
             
-            board[i][j] = Piece::EMPTY;
+            board[i][j] = EMPTY;
         }
     }
     initializePieces();
@@ -29,48 +29,25 @@ void Board::initializePieces() {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < BOARD_LENGTH; j++) {
             if ((i + j) % 2 == 0) {
-                board[i][j] = Piece::WHITE;
+                board[i][j] = WHITE;
             }
         }
     }
-
-    /* Old add in white pieces (discuss this)
-    for (int i=0; i<BOARD_LENGTH; i+=2) {
-        
-        for (int j=0; j<3; j+=2) {
-            board[i][j] = WHITE;
-        }
-    }
-    
-    for (int i=1; i<BOARD_LENGTH; i+=2) {
-        board[i][1] = WHITE;
-    }*/
     
     //adds black pieces
     for (int i = BOARD_LENGTH - 1; i > BOARD_LENGTH - 4; i--) {
         for (int j = 0; j < BOARD_LENGTH; j++) {
             if ((i + j) % 2 == 0) {
-                board[i][j] = Piece::BLACK;
+                board[i][j] = BLACK;
             }
         }
     }
-
-    /* old add black pieces (dicsuss this)
-    for (int i=1; i<BOARD_LENGTH; i+=2) {
-        for (int j=5; j<BOARD_LENGTH; j+=2) {
-            board[i][j] = BLACK;
-        }
-    }
-    
-    for (int i=0; i<BOARD_LENGTH; i+=2) {
-        board[i][6] = BLACK;
-    }*/
 }
 
 //moves piece from specified tile to specified tile
 void Board::movePiece(int currentX, int currentY, int newX, int newY) {
     //if empty piece is on the tile, we don't want to do anything (maybe throw an error?)
-    if (board[currentX][currentY] == Piece::EMPTY) {
+    if (board[currentX][currentY] == EMPTY) {
 
     }
     //if the move is not valid, we don't want to do anything (maybe throw an error?)
@@ -80,7 +57,16 @@ void Board::movePiece(int currentX, int currentY, int newX, int newY) {
     //otherwise, the move is valid, and we update board
     else {
         board[newX][newY] = board[currentX][currentY];
-        board[currentX][currentY] = Piece::EMPTY;
+        board[currentX][currentY] = EMPTY;
+    }
+}
+
+void Board::printBoard() {
+    for (int i = 0; i < BOARD_LENGTH; i++) {
+        for (int j = 0; j < BOARD_LENGTH; j++) {
+            printf("%i ", board[i][j]);
+        }
+        printf("\n");
     }
 }
 
@@ -92,7 +78,7 @@ bool Board::validMove(int currentX, int currentY, int newX, int newY) {
     Piece piece = board[currentX][currentY];
 
     //if a piece is on the passed destination, cannot move there
-    if (board[newX][newY] != Piece::EMPTY) {
+    if (board[newX][newY] != EMPTY) {
         return false;
     }
 
@@ -107,13 +93,13 @@ bool Board::validMove(int currentX, int currentY, int newX, int newY) {
     //stores values for opposite player
     Piece opp;
     Piece oppKing;
-    if (piece == Piece::WHITE || piece == Piece::WHITE_KING) {
-        opp = Piece::BLACK;
-        oppKing = Piece::BLACK_KING;
+    if (piece == WHITE || piece == WHITE_KING) {
+        opp = BLACK;
+        oppKing = BLACK_KING;
     }
     else {
-        opp = Piece::WHITE;
-        oppKing = Piece::WHITE_KING;
+        opp = WHITE;
+        oppKing = WHITE_KING;
     }
 
     //determines whether or not the attempted move is a jump
@@ -137,13 +123,13 @@ bool Board::validMove(int currentX, int currentY, int newX, int newY) {
     }
 
     //handles kings
-    if (piece == Piece::WHITE_KING || piece == Piece::BLACK_KING) {
+    if (piece == WHITE_KING || piece == BLACK_KING) {
         //already checked for valid jump, if jump, and already checked
         //for moving in a diagonal
         return true;
     }
     //handles black pieces
-    else if (piece == Piece::BLACK || piece == Piece::BLACK_KING) {
+    else if (piece == BLACK || piece == BLACK_KING) {
         //only move forward
         if (dir > 0) {
             return true;
@@ -153,7 +139,7 @@ bool Board::validMove(int currentX, int currentY, int newX, int newY) {
         }
     }
     //handles white pieces
-    else if (piece == Piece::WHITE) {
+    else if (piece == WHITE) {
         //only move forward
         if (dir > 0) {
             return true;

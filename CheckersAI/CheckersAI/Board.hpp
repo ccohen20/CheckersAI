@@ -17,6 +17,7 @@ class Board {
 public:
     Board();
     void movePiece(int currentX, int currentY, int newX, int newY);
+    void printBoard();
     
 private:
     Piece board[BOARD_LENGTH][BOARD_LENGTH];
