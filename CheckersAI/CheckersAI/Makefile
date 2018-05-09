@@ -1,4 +1,4 @@
-all: Board.o Board
+all: Board.o Test
 
 FLAGS = -g -Wall -Wextra -g
 
@@ -9,9 +9,6 @@ BoardImg: BoardImg.cpp BoardImg.hpp
 
 Board.o: Board.cpp Board.hpp Global.hpp
 	g++ $(FLAGS) -c Board.cpp
-
-Board: Board.o
-	g++ $(FLAGS) -o Board Board.o
 
 Test: Board.o
 	g++ $(FLAGS) -o Test Test.cpp Board.o

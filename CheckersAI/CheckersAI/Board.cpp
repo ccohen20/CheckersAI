@@ -148,4 +148,6 @@ bool Board::validMove(int currentX, int currentY, int newX, int newY) {
             return false;
         }
     }
+
+    return false;
 }
