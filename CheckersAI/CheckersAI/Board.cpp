@@ -86,10 +86,23 @@ void Board::movePiece(int currentX, int currentY, int newX, int newY) {
 
 //checks if a given move is valid
 //returns 0 on valid, 1 on square occupied, and 2 on move/direction not allowed
-int Board::validMove(int currentX, int currentY, int newX, int newY) {
+bool Board::validMove(int currentX, int currentY, int newX, int newY) {
     
     //stores value for simplicity
     Piece piece = board[currentX][currentY];
+
+    //if a piece is on the passed destination, cannot move there
+    if (board[newX][newY] != Piece::EMPTY) {
+        return false;
+    }
+
+    //must move diagonally
+    if (abs(newX - currentX) != abs(newY - currentY)) {
+        return false;
+    }
+
+    //stores direction of piece
+    int dir = newY - currentY;
 
     //stores values for opposite player
     Piece opp;
@@ -107,22 +120,46 @@ int Board::validMove(int currentX, int currentY, int newX, int newY) {
     //when moving 2 tiles away, so when abs(newX - currentX) == 2
     short isJump = abs(newX - currentX) - 1;
 
-    //handles case where destination tile is occupied
-    if (board[newX][newY] != Piece::EMPTY) {
-        return 1;
+    //if jump is greather than 1, invalid move
+    if (isJump > 1) {
+        return false;
+    }
+
+    //if jumping, finds whether or not there is an opposing piece in between the current piece and the destination
+    if (isJump == 1) {
+        int changeX = newX - currentX;
+        int changeY = newY - currentY;
+        int oppX = currentX + changeX;
+        int oppY = currentY + changeY;
+        if (board[oppX][oppY] != opp || board[oppX][oppY] != oppKing) {
+            return false;
+        }
+    }
+
+    //handles kings
+    if (piece == Piece::WHITE_KING || piece == Piece::BLACK_KING) {
+        //already checked for valid jump, if jump, and already checked
+        //for moving in a diagonal
+        return true;
     }
     //handles black pieces
     else if (piece == Piece::BLACK || piece == Piece::BLACK_KING) {
-
+        //only move forward
+        if (dir > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     //handles white pieces
-    else if (piece == Piece::WHITE || piece == Piece::WHITE_KING) {
-        //handles king movement
-        if (piece == Piece::WHITE_KING) {
-            //handles jump case
-            if (isJump == 1) {
-                
-            }
+    else if (piece == Piece::WHITE) {
+        //only move forward
+        if (dir > 0) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }

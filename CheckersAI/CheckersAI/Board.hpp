@@ -22,7 +22,7 @@ private:
     Piece board[BOARD_LENGTH][BOARD_LENGTH];
     void initializePieces();
     
-    int validMove(int currentX, int currentY, int newX, int newY);
+    bool validMove(int currentX, int currentY, int newX, int newY);
 };
 
 #endif /* Board_h */
