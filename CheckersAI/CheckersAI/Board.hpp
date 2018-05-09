@@ -18,11 +18,10 @@ public:
     Board();
     void movePiece(int currentX, int currentY, int newX, int newY);
     void printBoard();
+    Piece board[BOARD_LENGTH][BOARD_LENGTH];
     
 private:
-    Piece board[BOARD_LENGTH][BOARD_LENGTH];
     void initializePieces();
-    
     bool validMove(int currentX, int currentY, int newX, int newY);
 };
 

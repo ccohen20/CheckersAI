@@ -61,6 +61,7 @@ void Board::movePiece(int currentX, int currentY, int newX, int newY) {
     }
 }
 
+//prints the current board, used for debugging
 void Board::printBoard() {
     for (int i = 0; i < BOARD_LENGTH; i++) {
         for (int j = 0; j < BOARD_LENGTH; j++) {
@@ -69,6 +70,7 @@ void Board::printBoard() {
         printf("\n");
     }
 }
+
 
 //checks if a given move is valid
 //returns 0 on valid, 1 on square occupied, and 2 on move/direction not allowed
