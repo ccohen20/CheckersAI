@@ -60,7 +60,7 @@ void Board::movePiece(int currentX, int currentY, int newX, int newY) {
         board[currentY][currentX] = EMPTY;
 
         short isJump = abs(newX - currentX) - 1;
-        //removes piece if it is a jump
+        //removes jumped piece if the move is a jump
         if (isJump == 1) {
             int changeX;
             int changeY;
@@ -84,12 +84,22 @@ void Board::movePiece(int currentX, int currentY, int newX, int newY) {
 
             board[oppY][oppX] = EMPTY;
         }
+
+        //kings a piece if it got to the end
+        if (board[newY][newX] == WHITE && newY == 7) {
+            board[newY][newX] = WHITE_KING;
+        }
+        else if (board[newY][newX] == BLACK && newY == 0) {
+            board[newY][newX] = BLACK_KING;
+        }
+
     }
 }
 
 //prints the current board, used for debugging
 void Board::printBoard() {
     printf("   0 1 2 3 4 5 6 7\n");
+    printf("   ---------------\n");
     for (int i = 0; i < BOARD_LENGTH; i++) {
         printf("%i: ", i);
         for (int j = 0; j < BOARD_LENGTH; j++) {

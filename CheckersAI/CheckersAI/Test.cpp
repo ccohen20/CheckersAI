@@ -38,6 +38,40 @@ int main() {
     board.movePiece(5, 3, 6, 2);
     board.movePiece(2, 2, 1, 3);
     printf("\n");
+
+    //test for kinging pieces
+    board.movePiece(1, 1, 3, 3);
+    board.movePiece(3, 3, 4, 4);
+    board.movePiece(0, 0, 1, 1);
+    board.movePiece(1, 1, 2, 2);
+    board.movePiece(5, 5, 3, 3);
+    board.movePiece(3, 3, 1, 1);
+    board.printBoard();
+    board.movePiece(1, 1, 0, 0);
+
+    board.printBoard();
+
+    //tests moving kings
+    board.movePiece(0, 0, 1, 1);
+
+    //tests jumping with kings
+    board.movePiece(3, 1, 2, 2);
+    board.movePiece(1, 1, 3, 3);
+
+    //gets white king
+    board.movePiece(0, 6, 1, 5);
+    board.movePiece(1, 5, 0, 4);
+    board.movePiece(1, 7, 0, 6);
+    board.movePiece(0, 6, 1, 5);
+    board.movePiece(4, 2, 2, 4);
+    board.movePiece(2, 4, 0, 6);
+
+    board.printBoard();
+
+    board.movePiece(0, 6, 1, 7);
+
+    //tests moving white king
+    board.movePiece(1, 7, 0, 6);
     
 
     board.printBoard();
