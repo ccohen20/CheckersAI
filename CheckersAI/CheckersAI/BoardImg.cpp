@@ -63,7 +63,33 @@ void update() {
 }
 
 void render() {
+    //holds scale of board
+    float scale = 20.0;
 
+    //draws board
+    drawBoard(scale);
+
+
+    //renders the pieces
+    //drawPiece(5, 5, scale, 0.0, 0.0, 1.0);
+
+    //test animation
+    moveAnimation(1, 1, 2, 2, scale);
+    moveAnimation(2, 2, 3, 3, scale);
+
+    /*glBegin(GL_QUADS);
+        glVertex3f(-10.0, 0.0, -10.0);
+        glVertex3f(-10.0, 0.0, 10.0);
+        glVertex3f(10.0, 0.0, 10.0);
+        glVertex3f(10.0, 0.0, -10.0);
+    glEnd();*/
+
+    glutSwapBuffers();
+}
+
+
+//draws the board
+void drawBoard(float scale) {
     //puts translation matrix on so we have offset
         //makes placing peices easier
     glPushMatrix();
@@ -72,7 +98,6 @@ void render() {
     //creates board
     int z; //goes through z coordinates
     int x; //goes through x coordinates
-    float scale = 20.0;
     for (z = 0; z < 8; z++) {
         for (x = 0; x < 8; x++) {
             //handles color
@@ -89,17 +114,92 @@ void render() {
             glEnd();
         }
     }
+
     glPopMatrix();
 
+}
 
-    /*glBegin(GL_QUADS);
-        glVertex3f(-10.0, 0.0, -10.0);
-        glVertex3f(-10.0, 0.0, 10.0);
-        glVertex3f(10.0, 0.0, 10.0);
-        glVertex3f(10.0, 0.0, -10.0);
-    glEnd();*/
 
-    glutSwapBuffers();
+//draws a given piece at (x, y) with color (r, g, b)
+//scale used to map to correct place on board
+void drawPiece(float x, float y, float scale, double r, double g, double b) {
+    glColor4f(r, g, b, 1.0);
+
+    //updates x and y to reflect that of board
+    x = 7 - x;
+
+    //draws clyinder
+    float w = 8;
+    float h = 4;
+    glPushMatrix();
+    glTranslated(x * scale, 0, y * scale);
+
+    //bases
+    glBegin(GL_QUADS);
+        glVertex3f(-w, 0.0, w);
+        glVertex3f(-w, 0.0, -w);
+        glVertex3f(w, 0.0, -w);
+        glVertex3f(w, 0.0, w);
+    glEnd();
+    glBegin(GL_QUADS);
+        glVertex3f(-w, h, w);
+        glVertex3f(-w, h, -w);
+        glVertex3f(w, h, -w);
+        glVertex3f(w, h, w);
+    glEnd();
+
+    //sides
+    glBegin(GL_QUADS);
+        glVertex3f(-w, 0.0, w);
+        glVertex3f(-w, 0.0, -w);
+        glVertex3f(-w, h, -w);
+        glVertex3f(-w, h, w);
+    glEnd();
+    glBegin(GL_QUADS);
+        glVertex3f(w, 0.0, w);
+        glVertex3f(w, 0.0, -w);
+        glVertex3f(w, h, -w);
+        glVertex3f(w, h, w);
+    glEnd();
+    glBegin(GL_QUADS);
+        glVertex3f(w, 0.0, -w);
+        glVertex3f(-w, 0.0, -w);
+        glVertex3f(-w, h, -w);
+        glVertex3f(w, h, -w);
+    glEnd();
+    glBegin(GL_QUADS);
+        glVertex3f(w, 0.0, w);
+        glVertex3f(-w, 0.0, w);
+        glVertex3f(-w, h, w);
+        glVertex3f(w, h, w);
+    glEnd();
+
+    glPopMatrix();
+}
+
+
+//moveAnimation for a piece
+void moveAnimation (int oldX, int oldY, int newX, int newY, float scale) {
+    //used for iteration
+    int steps = 1000;
+    //hold increment values for each iteration
+    double rX = (float)(newX - oldX) / steps;
+    double rY = (float)(newY - oldY) / steps;
+
+    double X = oldX;
+    double Y = oldY;
+    //animation loop
+    for (int i = 0; i < steps; i++) {
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+        drawBoard(scale);
+
+        drawPiece(X, Y, scale, 0.0, 0.0, 1.0);
+
+        X = X + rX;
+        Y = Y + rY;
+
+        glutSwapBuffers();
+    }
 }
 
 int main(int argc, char ** argv){
@@ -107,5 +207,7 @@ int main(int argc, char ** argv){
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
     glutMainLoop();
+
+    printf("exited");
     return 0;
 }
