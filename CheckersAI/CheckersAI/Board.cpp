@@ -48,27 +48,57 @@ void Board::initializePieces() {
 void Board::movePiece(int currentX, int currentY, int newX, int newY) {
     //if empty piece is on the tile, we don't want to do anything (maybe throw an error?)
     if (board[currentY][currentX] == EMPTY) {
-
+        printf("Invlaid Move: No piece at (%i, %i)\n", currentX, currentY);
     }
     //if the move is not valid, we don't want to do anything (maybe throw an error?)
     else if (!validMove(currentX, currentY, newX, newY)) {
-
+        printf("Invalid Move: Cannot move piece from (%i, %i) to (%i, %i)\n", currentX, currentY, newX, newY);
     }
     //otherwise, the move is valid, and we update board
     else {
         board[newY][newX] = board[currentY][currentX];
         board[currentY][currentX] = EMPTY;
+
+        short isJump = abs(newX - currentX) - 1;
+        //removes piece if it is a jump
+        if (isJump == 1) {
+            int changeX;
+            int changeY;
+            //handles change in X
+            if (newX - currentX > 0) {
+                changeX = 1;
+            }
+            else {
+                changeX = -1;
+            }
+            //handles change in Y
+            if (newY - currentY > 0) {
+                changeY = 1;
+            }
+            else {
+                changeY = -1;
+            }
+
+            int oppX = currentX + changeX;
+            int oppY = currentY + changeY;
+
+            board[oppY][oppX] = EMPTY;
+        }
     }
 }
 
 //prints the current board, used for debugging
 void Board::printBoard() {
+    printf("   0 1 2 3 4 5 6 7\n");
     for (int i = 0; i < BOARD_LENGTH; i++) {
+        printf("%i: ", i);
         for (int j = 0; j < BOARD_LENGTH; j++) {
             printf("%i ", board[i][j]);
         }
         printf("\n");
     }
+
+    printf("\n");
 }
 
 
@@ -108,6 +138,8 @@ bool Board::validMove(int currentX, int currentY, int newX, int newY) {
     //when moving 2 tiles away, so when abs(newX - currentX) == 2
     short isJump = abs(newX - currentX) - 1;
 
+    //printf("%i\n", isJump);
+
     //if jump is greather than 1, invalid move
     if (isJump > 1) {
         return false;
@@ -115,25 +147,43 @@ bool Board::validMove(int currentX, int currentY, int newX, int newY) {
 
     //if jumping, finds whether or not there is an opposing piece in between the current piece and the destination
     if (isJump == 1) {
-        int changeX = newX - currentX;
-        int changeY = newY - currentY;
+        int changeX;
+        int changeY;
+        //handles change in X
+        if (newX - currentX > 0) {
+            changeX = 1;
+        }
+        else {
+            changeX = -1;
+        }
+        //handles change in Y
+        if (newY - currentY > 0) {
+            changeY = 1;
+        }
+        else {
+            changeY = -1;
+        }
+
         int oppX = currentX + changeX;
         int oppY = currentY + changeY;
-        if (board[oppY][oppX] != opp || board[oppY][oppX] != oppKing) {
+        //printf("Opp Position: (%i, %i)\n", oppX, oppY);
+        //printf("Opp: %i, board[oppY][oppX]: %i\n", opp, board[oppY][oppX]);
+        if (board[oppY][oppX] != opp && board[oppY][oppX] != oppKing) {
             return false;
         }
     }
 
     //handles kings
+    //printf("Dir: %i\n", dir);
     if (piece == WHITE_KING || piece == BLACK_KING) {
         //already checked for valid jump, if jump, and already checked
         //for moving in a diagonal
         return true;
     }
     //handles black pieces
-    else if (piece == BLACK || piece == BLACK_KING) {
+    else if (piece == BLACK) {
         //only move forward
-        if (dir > 0) {
+        if (dir < 0) {
             return true;
         }
         else {
@@ -152,4 +202,16 @@ bool Board::validMove(int currentX, int currentY, int newX, int newY) {
     }
 
     return false;
+}
+
+
+//debuging functions
+//returns piece at (x, y)
+int Board::getPiece(int x, int y) {
+    return board[y][x];
+}
+
+//prints piece at (x, y)
+void Board::printPiece(int x, int y) {
+    printf("%i\n", board[y][x]);
 }
