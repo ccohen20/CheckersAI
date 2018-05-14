@@ -1,6 +1,7 @@
 #include <iostream>
+#include "Board.hpp"
 
-search(int depth){
+search(Board board, int depth){
 
 	bestMove= 0;
 	//vector <board> moveList;
