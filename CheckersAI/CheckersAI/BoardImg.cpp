@@ -7,7 +7,8 @@
 
 int width = 900;
 int height = 400;
-float distance = 100;
+float dist = 100;
+Board board;
 
 //called once at beginning
 //initializes environment
@@ -42,7 +43,7 @@ void reshape(int newWidth, int newHeight) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     float aspect = (float)width / (float)height;
-    gluPerspective(40.0, aspect, 25.0, distance * distance);
+    gluPerspective(40.0, aspect, 25.0, dist * dist);
 
 }
 
@@ -69,20 +70,67 @@ void render() {
     //draws board
     drawBoard(scale);
 
-
     //renders the pieces
-    //drawPiece(5, 5, scale, 0.0, 0.0, 1.0);
+    drawPieces(-1, -1, scale);
 
-    //test animation
-    moveAnimation(1, 1, 2, 2, scale);
-    moveAnimation(2, 2, 3, 3, scale);
+    //gets user input
+    int pieceX = -1;
+    int pieceY = -1;
+    int destX = -1;
+    int destY = -1;
+    //handles selecting the piece
+    bool done = false;
+    while (!done) {
+        string input;
+        printf("Select a piece in the form row_column, where _ indicates a space: ");
+        getline(cin, input);
+        if (input.length() != 3) {
+            printf("Invalid Input: Input must be of the form int_int where _ is a space\n");
+        }
+        else if (!isdigit(input[0]) || !isdigit(input[2])) {
+            printf("Invalid Input: Input must be of the form int_int where _ is a space\n");
+        }
+        else {
+            pieceX = input[0] - '0';
+            pieceY = input[2] - '0';
+            if (board.getPiece(pieceX, pieceY) != EMPTY) {
+                done = true;
+            }
+            else {
+                printf("Invalid Selection: Must select a tile your piece is on\n");
+            }
+        }
+        cin.clear();
+    }
+    //handles selecting the destination
+    done = false;
+    while (!done) {
+        string input;
+        printf("Select a destination in the form row_column, where _ indicates a space: ");
+        getline(cin, input);
+        if (input.length() != 3) {
+            printf("Invalid Input: Input must be of the form int_int where _ is a space\n");
+        }
+        else if (!isdigit(input[0]) || !isdigit(input[2])) {
+            printf("Invalid Input: Input must be of the form int_int where _ is a space\n");
+        }
+        else {
+            destX = input[0] - '0';
+            destY = input[2] - '0';
+            if (board.getPiece(destX, destY) == EMPTY) {
+                done = true;
+            }
+            else {
+                printf("Invalid Selection: Must select an empty tile\n");
+            }
+        }
+        cin.clear();
+    }
 
-    /*glBegin(GL_QUADS);
-        glVertex3f(-10.0, 0.0, -10.0);
-        glVertex3f(-10.0, 0.0, 10.0);
-        glVertex3f(10.0, 0.0, 10.0);
-        glVertex3f(10.0, 0.0, -10.0);
-    glEnd();*/
+    //updates board
+    board.movePiece(pieceX, pieceY, destX, destY);
+
+    moveAnimation(pieceX, pieceY, destX, destY, scale);
 
     glutSwapBuffers();
 }
@@ -120,10 +168,29 @@ void drawBoard(float scale) {
 }
 
 
+//draws all pieces on the board, except the piece at the passed position
+void drawPieces(int x, int y, float scale) {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (board.getPiece(i, j) != EMPTY && x != i && y != j) {
+                int piece = board.getPiece(i, j);
+                if (piece == BLACK || piece == BLACK_KING) {
+                    glColor4f(0.0, 1.0, 0.0, 1.0);
+                }
+                else {
+                    glColor4f(0.0, 0.0, 1.0, 1.0);
+                }
+
+                drawPiece(i, j, scale);
+            }
+        }
+    }
+}
+
+
 //draws a given piece at (x, y) with color (r, g, b)
 //scale used to map to correct place on board
-void drawPiece(float x, float y, float scale, double r, double g, double b) {
-    glColor4f(r, g, b, 1.0);
+void drawPiece(float x, float y, float scale) {
 
     //updates x and y to reflect that of board
     x = 7 - x;
@@ -193,7 +260,16 @@ void moveAnimation (int oldX, int oldY, int newX, int newY, float scale) {
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
         drawBoard(scale);
 
-        drawPiece(X, Y, scale, 0.0, 0.0, 1.0);
+        //since we call animation after updating the board, we use the new postion for color
+        int piece = board.getPiece(newX, newY);
+        if (piece == BLACK || piece == BLACK_KING) {
+            glColor4f(0.0, 1.0, 0.0, 1.0);
+        }
+        else {
+            glColor4f(0.0, 0.0, 1.0, 1.0);
+        }
+
+        drawPiece(X, Y, scale);
 
         X = X + rX;
         Y = Y + rY;
