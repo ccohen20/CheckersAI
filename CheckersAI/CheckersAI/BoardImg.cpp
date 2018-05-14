@@ -9,6 +9,11 @@ int width = 900;
 int height = 400;
 float dist = 100;
 Board board;
+//holds user input
+int pieceX = -1;
+int pieceY = -1;
+int destX = -1;
+int destY = -1;
 
 //called once at beginning
 //initializes environment
@@ -73,11 +78,22 @@ void render() {
     //renders the pieces
     drawPieces(-1, -1, scale);
 
-    //gets user input
-    int pieceX = -1;
-    int pieceY = -1;
-    int destX = -1;
-    int destY = -1;
+    //updates board
+    if (pieceX != -1 && pieceY != -1 && destX != -1 && destY != -1) {
+        board.movePiece(pieceX, pieceY, destX, destY);
+        moveAnimation(pieceX, pieceY, destX, destY, scale);
+
+        pieceX = -1;
+        pieceY = -1;
+        destX = -1;
+        destY = -1;
+    }
+
+    glutSwapBuffers();
+}
+
+//gets user input
+void input() {
     //handles selecting the piece
     bool done = false;
     while (!done) {
@@ -126,13 +142,7 @@ void render() {
         }
         cin.clear();
     }
-
-    //updates board
-    board.movePiece(pieceX, pieceY, destX, destY);
-
-    moveAnimation(pieceX, pieceY, destX, destY, scale);
-
-    glutSwapBuffers();
+    glutPostRedisplay();
 }
 
 
@@ -172,7 +182,7 @@ void drawBoard(float scale) {
 void drawPieces(int x, int y, float scale) {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (board.getPiece(i, j) != EMPTY && x != i && y != j) {
+            if (board.getPiece(i, j) != EMPTY && (x != i || y != j)) {
                 int piece = board.getPiece(i, j);
                 if (piece == BLACK || piece == BLACK_KING) {
                     glColor4f(0.0, 1.0, 0.0, 1.0);
@@ -248,18 +258,20 @@ void drawPiece(float x, float y, float scale) {
 //moveAnimation for a piece
 void moveAnimation (int oldX, int oldY, int newX, int newY, float scale) {
     //used for iteration
-    int steps = 1000;
+    int steps = 100;
     //hold increment values for each iteration
     double rX = (float)(newX - oldX) / steps;
     double rY = (float)(newY - oldY) / steps;
 
     double X = oldX;
     double Y = oldY;
+
     //animation loop
     for (int i = 0; i < steps; i++) {
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
         drawBoard(scale);
 
+        //gets color
         //since we call animation after updating the board, we use the new postion for color
         int piece = board.getPiece(newX, newY);
         if (piece == BLACK || piece == BLACK_KING) {
@@ -271,17 +283,40 @@ void moveAnimation (int oldX, int oldY, int newX, int newY, float scale) {
 
         drawPiece(X, Y, scale);
 
+        drawPieces(newX, newY, scale);
+
         X = X + rX;
         Y = Y + rY;
 
         glutSwapBuffers();
     }
+
+    //end of animation
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    drawBoard(scale);
+
+    //gets color
+    //since we call animation after updating the board, we use the new postion for color
+    int piece = board.getPiece(newX, newY);
+    if (piece == BLACK || piece == BLACK_KING) {
+        glColor4f(0.0, 1.0, 0.0, 1.0);
+    }
+    else {
+        glColor4f(0.0, 0.0, 1.0, 1.0);
+    }
+
+    drawPieces(-1, -1, scale);
+
+    glutSwapBuffers();
+
+
 }
 
 int main(int argc, char ** argv){
     init(argc, argv);
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
+    glutIdleFunc(input);
     glutMainLoop();
 
     printf("exited");

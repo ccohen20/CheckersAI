@@ -15,6 +15,7 @@ void reshape(int newWidth, int newHeight);
 void display(void);
 void update();
 void render();
+void input();
 void drawBoard(float scale);
 void drawPieces(int x, int y, float scale);
 void drawPiece(float x, float y, float scale);
