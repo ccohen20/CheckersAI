@@ -80,7 +80,7 @@ void render() {
 
     //updates board
     if (pieceX != -1 && pieceY != -1 && destX != -1 && destY != -1) {
-        int isJump = destX - pieceX - 1;
+        int isJump = abs(destX - pieceX) - 1;
         if (isJump > 1) {
             printf("Invalid Move: Cannot jump that far\n");
         }
@@ -354,9 +354,12 @@ void jumpAnimation (int oldX, int oldY, int newX, int newY, float scale) {
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
         drawBoard(scale);
 
+        //called before we update board, so don't draw piece where it used to be
+        drawPieces(oldX, oldY, scale);
+
         //gets color
-        //since we call animation after updating the board, we use the new postion for color
-        int piece = board.getPiece(newX, newY);
+        //since we call animation before updating the board, we use the old postion for color
+        int piece = board.getPiece(oldX, oldY);
         if (piece == BLACK || piece == BLACK_KING) {
             glColor4f(0.0, 1.0, 0.0, 1.0);
         }
@@ -369,9 +372,6 @@ void jumpAnimation (int oldX, int oldY, int newX, int newY, float scale) {
         glTranslatef(0.0,  10 * sin(t), 0.0);;
         drawPiece(X, Y, scale);
         glPopMatrix();
-
-        //called before we update board, so don't draw piece where it used to be
-        drawPieces(oldX, oldY, scale);
 
         //increment values
         X = X + rX;
