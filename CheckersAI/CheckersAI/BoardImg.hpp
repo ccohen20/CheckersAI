@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <cctype>
+#include <cmath>
 #include "Board.hpp"
 using namespace std;
 
@@ -20,6 +21,7 @@ void drawBoard(float scale);
 void drawPieces(int x, int y, float scale);
 void drawPiece(float x, float y, float scale);
 void moveAnimation(int oldX, int oldY, int newX, int newY, float scale);
+void jumpAnimation(int oldX, int oldY, int newX, int newY, float scale);
 
 
 #endif

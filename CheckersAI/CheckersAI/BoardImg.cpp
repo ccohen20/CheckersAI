@@ -80,8 +80,24 @@ void render() {
 
     //updates board
     if (pieceX != -1 && pieceY != -1 && destX != -1 && destY != -1) {
+        int isJump = destX - pieceX - 1;
+        if (isJump > 1) {
+            printf("Invalid Move: Cannot jump that far\n");
+        }
+        else if (isJump == 1) {
+            jumpAnimation(pieceX, pieceY, destX, destY, scale);
+        }
+
         board.movePiece(pieceX, pieceY, destX, destY);
-        moveAnimation(pieceX, pieceY, destX, destY, scale);
+
+        if (isJump == 1) {
+            int oppX = ((destX - pieceX) / 2) + pieceX;
+            int oppY = ((destY - pieceY) / 2) + pieceY;
+            moveAnimation(oppX, oppY, destX, destY, scale);
+        }
+        else {
+            moveAnimation(pieceX, pieceY, destX, destY, scale);
+        }
 
         pieceX = -1;
         pieceY = -1;
@@ -311,6 +327,61 @@ void moveAnimation (int oldX, int oldY, int newX, int newY, float scale) {
 
 
 }
+
+
+//jump animation
+//jumpAnimation for a piece
+void jumpAnimation (int oldX, int oldY, int newX, int newY, float scale) {
+    //used for iteration
+    int steps = 100;
+
+    //gets location of enemy piece
+    int oppX = ((newX - oldX) / 2) + oldX;
+    int oppY = ((newY - oldY) / 2) + oldY;
+
+    //hold increment values for each iteration
+    double rX = (float)(oppX - oldX) / steps;
+    double rY = (float)(oppY - oldY) / steps;
+    double tstep = M_PI / steps;
+
+    //initial values
+    double X = oldX;
+    double Y = oldY;
+    double t = 0;
+
+    //animation loop for jumping onto piece
+    for (int i = 0; i < steps; i++) {
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+        drawBoard(scale);
+
+        //gets color
+        //since we call animation after updating the board, we use the new postion for color
+        int piece = board.getPiece(newX, newY);
+        if (piece == BLACK || piece == BLACK_KING) {
+            glColor4f(0.0, 1.0, 0.0, 1.0);
+        }
+        else {
+            glColor4f(0.0, 0.0, 1.0, 1.0);
+        }
+
+        //accounts for vertical jump
+        glPushMatrix();
+        glTranslatef(0.0,  10 * sin(t), 0.0);;
+        drawPiece(X, Y, scale);
+        glPopMatrix();
+
+        //called before we update board, so don't draw piece where it used to be
+        drawPieces(oldX, oldY, scale);
+
+        //increment values
+        X = X + rX;
+        Y = Y + rY;
+        t = t + tstep;
+
+        glutSwapBuffers();
+    }
+}
+
 
 int main(int argc, char ** argv){
     init(argc, argv);
