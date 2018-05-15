@@ -26,12 +26,64 @@ enum Piece {
     BLACK, BLACK_KING
 };
 
+typedef struct MOVE {
+    //int isBlack;
+    //int isKing;
+    int score;
+    int dest[2];
+}MOVE;
+
 typedef struct PIECE {
 	int isBlack;
 	//using namespace std;
-	vector<array<int, 2> > moves;
+    vector<MOVE> moves;
 	int isKing;
 	int pos[2];
+public:
+    void setPos(int, int);
+    void addMove(int, int);
+    void clearMoves();
+    MOVE getMove(int);
+    int getSize();
+    int getX();
+    int getY();
 }PIECE;
+
+int PIECE::getX(){
+    return pos[0];
+}
+
+int PIECE::getY(){
+    return pos[1];
+}
+
+MOVE PIECE::getMove(int index){
+    return moves[index];
+}
+
+int PIECE::getSize(){
+    return moves.size();
+}
+
+void PIECE::setPos(int x, int y){
+    pos[0] = x;
+    pos[1] = y;
+    return;
+    
+}
+
+void PIECE::addMove(int x, int y){
+    MOVE move;
+    move.dest[0] = x;
+    move.dest[1] = y;
+    moves.push_back(move);
+    return;
+}
+
+void PIECE::clearMoves(){
+    vector<MOVE> moves2;
+    moves = moves2;
+    return;
+}
 
 #endif /* Global_h */
