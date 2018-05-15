@@ -4,6 +4,15 @@
 search(Board board, int depth){
 
 	bestMove= 0;
+
+	for(int i=0; i<BOARD_LENGTH; i++){
+		for(int j=0; j<BOARD_LENGTH; j++) {
+			if(board[i][j]==piece){
+				board.validMove
+			}
+		}
+	}
+
 	//vector <board> moveList;
 	vector <int> moveList;
 	//implement this, babyyyyyy
