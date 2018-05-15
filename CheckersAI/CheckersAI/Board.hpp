@@ -16,15 +16,16 @@ class Board {
     
 public:
     Board();
+    Board copyBoard();
     int movePiece(int currentX, int currentY, int newX, int newY);
     void printBoard();
     Piece board[BOARD_LENGTH][BOARD_LENGTH];
     int getPiece(int x, int y);
     void printPiece(int x, int y);
+    bool validMove(int currentX, int currentY, int newX, int newY);
     
 private:
     void initializePieces();
-    bool validMove(int currentX, int currentY, int newX, int newY);
 };
 
 #endif /* Board_h */

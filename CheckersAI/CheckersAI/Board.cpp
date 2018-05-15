@@ -44,6 +44,19 @@ void Board::initializePieces() {
     }
 }
 
+
+//makes a copy of the current board
+Board Board::copyBoard() {
+    Board newBoard;
+    for (int i = 0; i < BOARD_LENGTH; i++) {
+        for (int j = 0; j < BOARD_LENGTH; j++) {
+            newBoard.board[i][j] = board[i][j];
+        }
+    }
+
+    return newBoard;
+}
+
 //moves piece from specified tile to specified tile
 int Board::movePiece(int currentX, int currentY, int newX, int newY) {
     //if empty piece is on the tile, we don't want to do anything (maybe throw an error?)
@@ -118,6 +131,14 @@ void Board::printBoard() {
 //returns 0 on valid, 1 on square occupied, and 2 on move/direction not allowed
 bool Board::validMove(int currentX, int currentY, int newX, int newY) {
     
+    //handles index out of bounds
+    if (newX < 0 || newX > BOARD_LENGTH - 7) {
+        return false;
+    }
+    else if (newY < 0 || newY > BOARD_LENGTH - 7) {
+        return false;
+    }
+
     //stores value for simplicity
     Piece piece = board[currentY][currentX];
 
