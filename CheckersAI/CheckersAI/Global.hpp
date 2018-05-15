@@ -30,6 +30,7 @@ typedef struct MOVE {
     //int isBlack;
     //int isKing;
     int score;
+    int start[2];
     int dest[2];
 }MOVE;
 
@@ -39,6 +40,8 @@ typedef struct PIECE {
     vector<MOVE> moves;
 	int isKing;
 	int pos[2];
+    int maxScore;
+    int maxIndex;
 public:
     void setPos(int, int);
     void addMove(int, int);
@@ -47,7 +50,28 @@ public:
     int getSize();
     int getX();
     int getY();
+    void genScore();
 }PIECE;
+
+void PIECE:genScore(){
+    int size = moves.size();
+    if(size>0){
+        int ind = 0;
+        int max = moves[0].score;
+        for(int i = 1; i < size; i++){
+            if(moves[i].score>max){
+                max = moves[i].score;
+                ind = i;
+            }
+            }
+        maxScore = max;
+        maxIndex = ind;
+    } else {
+        maxScore = 0;
+        maxIndex = 0;
+    }
+    
+}
 
 int PIECE::getX(){
     return pos[0];
