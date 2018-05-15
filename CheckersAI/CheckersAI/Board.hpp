@@ -2,8 +2,8 @@
 //  Board.h
 //  CheckersAI
 //
-//  Created by Kenny Wang on 4/12/18.
-//  Copyright © 2018 Kenny Wang. All rights reserved.
+//  Kenny Wang, Cam Cohen, Robby Lamon
+//  
 //
 
 #ifndef Board_hpp
