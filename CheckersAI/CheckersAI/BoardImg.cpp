@@ -88,21 +88,23 @@ void render() {
             jumpAnimation(pieceX, pieceY, destX, destY, scale);
         }
 
-        board.movePiece(pieceX, pieceY, destX, destY);
+        int moved = board.movePiece(pieceX, pieceY, destX, destY);
 
-        if (isJump == 1) {
-            int oppX = ((destX - pieceX) / 2) + pieceX;
-            int oppY = ((destY - pieceY) / 2) + pieceY;
-            moveAnimation(oppX, oppY, destX, destY, scale);
-        }
-        else {
-            moveAnimation(pieceX, pieceY, destX, destY, scale);
-        }
+        if (moved == 0) {
+            if (isJump == 1) {
+                int oppX = ((destX - pieceX) / 2) + pieceX;
+                int oppY = ((destY - pieceY) / 2) + pieceY;
+                moveAnimation(oppX, oppY, destX, destY, scale);
+            }
+            else {
+                moveAnimation(pieceX, pieceY, destX, destY, scale);
+            }
 
-        pieceX = -1;
-        pieceY = -1;
-        destX = -1;
-        destY = -1;
+            pieceX = -1;
+            pieceY = -1;
+            destX = -1;
+            destY = -1;
+        }
     }
 
     glutSwapBuffers();
@@ -207,7 +209,11 @@ void drawPieces(int x, int y, float scale) {
                     glColor4f(0.0, 0.0, 1.0, 1.0);
                 }
 
-                drawPiece(i, j, scale);
+                int h = 4;
+                if (board.getPiece(i, j) == WHITE_KING || board.getPiece(i, j) == BLACK_KING) {
+                    h = 8;
+                }
+                drawPiece(i, j, h, scale);
             }
         }
     }
@@ -216,14 +222,13 @@ void drawPieces(int x, int y, float scale) {
 
 //draws a given piece at (x, y) with color (r, g, b)
 //scale used to map to correct place on board
-void drawPiece(float x, float y, float scale) {
+void drawPiece(float x, float y, int h, float scale) {
 
     //updates x and y to reflect that of board
     x = 7 - x;
 
     //draws clyinder
     float w = 8;
-    float h = 4;
     glPushMatrix();
     glTranslated(x * scale, 0, y * scale);
 
@@ -297,7 +302,13 @@ void moveAnimation (int oldX, int oldY, int newX, int newY, float scale) {
             glColor4f(0.0, 0.0, 1.0, 1.0);
         }
 
-        drawPiece(X, Y, scale);
+        //handles king / regular height
+        if (piece == WHITE || piece == BLACK) {
+            drawPiece(X, Y, 4, scale);
+        }
+        else {
+            drawPiece(X, Y, 8, scale);
+        }
 
         drawPieces(newX, newY, scale);
 
@@ -367,10 +378,15 @@ void jumpAnimation (int oldX, int oldY, int newX, int newY, float scale) {
             glColor4f(0.0, 0.0, 1.0, 1.0);
         }
 
+
+        int h = 4;
+        if (piece == BLACK_KING || piece == WHITE_KING) {
+            h = 8;
+        }
         //accounts for vertical jump
         glPushMatrix();
-        glTranslatef(0.0,  10 * sin(t), 0.0);;
-        drawPiece(X, Y, scale);
+        glTranslatef(0.0,  10 * sin(t), 0.0);
+        drawPiece(X, Y, h, scale);
         glPopMatrix();
 
         //increment values
