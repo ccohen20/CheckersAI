@@ -1,17 +1,58 @@
 #include <iostream>
 #include "Board.hpp"
 
-search(Board board, int depth){
+MOVE search(Board board, int depth, int black){
+    
+    int color;
+    if(black){
+        color = BLACK;
+    } else {
+        color = WHITE;
+    }
+    int becomeKing = 5;
+    int kill = 3;
+    int center = 1;
+    
+    vector<PIECE> pieces;
 
 	bestMove= 0;
 
+    //create piece objects for pieces of the desired team
 	for(int i=0; i<BOARD_LENGTH; i++){
 		for(int j=0; j<BOARD_LENGTH; j++) {
-			if(board[i][j]==piece){
-				board.validMove
+			if(board[i][j]==color){
+                //create new pieces
+                PIECE temp;
+                int pos[2] = {i,j};
+                temp.pos = pos;
+                temp.moves = getMoves(board, temp);
+                temp.genScore();
+                pieces.push_back(temp);
 			}
 		}
 	}
+    
+    //find best piece to move
+    int psize = pieces.size();
+    int maxScore = pieces[0].maxScore;
+    int maxIndex = pieces[0].maxIndex;
+    int pindex = 0;
+    for(int i=1; i < psize; i++){
+        if(pieces[i].maxScore>maxScore){
+            maxScore = pieces[i].maxScore;
+            maxIndex = pieces[i].maxIndex;
+            pindex = i;
+        }
+    }
+    
+    return pieces[pindex].moves[maxIndex];
+    
+    void getMoves(Board b, PIECE p){
+        int start = p.pos;
+        
+        
+    }
+    
 
 	//vector <board> moveList;
 	vector <int> moveList;

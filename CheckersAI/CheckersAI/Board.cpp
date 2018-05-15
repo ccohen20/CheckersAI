@@ -45,14 +45,16 @@ void Board::initializePieces() {
 }
 
 //moves piece from specified tile to specified tile
-void Board::movePiece(int currentX, int currentY, int newX, int newY) {
+int Board::movePiece(int currentX, int currentY, int newX, int newY) {
     //if empty piece is on the tile, we don't want to do anything (maybe throw an error?)
     if (board[currentY][currentX] == EMPTY) {
         printf("Invlaid Move: No piece at (%i, %i)\n", currentX, currentY);
+        return 1;
     }
     //if the move is not valid, we don't want to do anything (maybe throw an error?)
     else if (!validMove(currentX, currentY, newX, newY)) {
         printf("Invalid Move: Cannot move piece from (%i, %i) to (%i, %i)\n", currentX, currentY, newX, newY);
+        return 1;
     }
     //otherwise, the move is valid, and we update board
     else {
@@ -92,7 +94,7 @@ void Board::movePiece(int currentX, int currentY, int newX, int newY) {
         else if (board[newY][newX] == BLACK && newY == 0) {
             board[newY][newX] = BLACK_KING;
         }
-
+        return 0;
     }
 }
 
