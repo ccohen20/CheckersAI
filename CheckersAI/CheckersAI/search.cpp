@@ -11,10 +11,10 @@ int minmax(Board b, int depth, int bot){
     if(bot){
         //basecase
         if(depth==0){
-            return scoreBoard(b,1);
+            return scoreBoard(b,computer);
         } 
         else {
-            vector<Move> moves = getMoves(b,1);
+            vector<Move> moves = getMoves(b,computer);
             int size = moves.size();
             int bestVal = BIGNEG;
             for(int i = 0; i < size; i++){
@@ -23,7 +23,7 @@ int minmax(Board b, int depth, int bot){
 
                 temp.movePiece(move.oldX,move.oldY,move.newX,move.newY);
                 //min
-                int moveVal = minmax(temp, depth-1, 0);
+                int moveVal = minmax(temp, depth-1, player);
                 //maximizing worst outcomes
                 if(moveVal > bestVal){
                     bestVal = moveVal;
@@ -36,10 +36,10 @@ int minmax(Board b, int depth, int bot){
     else {
         //basecase
         if(depth==0){
-            return scoreBoard(b,1);
+            return scoreBoard(b,player);
         } 
         else {
-            vector<Move> moves = getMoves(b,0);
+            vector<Move> moves = getMoves(b,player);
             int size = moves.size();
             int bestVal = BIGPOS;
             for(int i = 0; i < size; i++){
@@ -48,7 +48,7 @@ int minmax(Board b, int depth, int bot){
 
                 temp.movePiece(move.oldX,move.oldY,move.newX,move.newY);
                 //min
-                int moveVal = minmax(temp, depth-1, 1);
+                int moveVal = minmax(temp, depth-1, computer);
                 //minimizing best outcomes
                 if(moveVal < bestVal){
                     bestVal = moveVal;
