@@ -60,6 +60,33 @@ int minmax(Board b, int depth, int bot){
 }
 
 
+Move searchJump(Board b, int depth, int x, int y) {
+    
+    Move bestMove;
+    int bestVal;
+
+    vector<Move> moves;
+    moves = getJumps(b, x, y);
+    int size = moves.size();
+
+    bestVal = BIGNEG;
+    for(int i = 0; i < size; i++){
+        Move move = moves[i];
+        Board temp = b.copyBoard();
+
+
+        temp.movePiece(move.oldX,move.oldY,move.newX,move.newY);
+        //min
+        int moveVal = minmax(temp, depth-1, 0);
+        //maximizing worst outcomes
+        if(moveVal > bestVal){
+            bestVal = moveVal;
+            bestMove = move;
+        }
+    }
+    return bestMove;
+}
+
 Move search(Board b, int depth, int bot){
 
     Move bestMove;

@@ -151,7 +151,7 @@ void render() {
         Move move;
         //handles case where computer is jumping again
         if (compJump) {
-            move = makeJump(board, jumpX, jumpY);
+            move = searchJump(board, 3, jumpX, jumpY);
             compJump = false;
         }
         //gets the computer's move

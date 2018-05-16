@@ -7,6 +7,7 @@
 
 int minmax(Board b, int depth, int bot);
 Move search(Board b, int depth, int bot);
+Move searchJump(Board b, int depth, int x, int y);
 
 
 #endif /* search_h */
