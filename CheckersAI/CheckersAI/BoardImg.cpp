@@ -2,7 +2,7 @@
     BoardImg.cpp handles Rendering of Board
 
 */
-
+#include "search.hpp"
 #include "BoardImg.hpp"
 
 int width = 900;
@@ -129,7 +129,8 @@ void render() {
     //handles computer turn
     if (compMove) {
         //gets the computer's move
-        Move move = makeMove(board);
+        //Move move = makeMove(board);
+        Move move = search(board,3,1);
 
         //determines whether or not a move is a jump
         int isJump = abs(move.newX - move.oldX) - 1;
