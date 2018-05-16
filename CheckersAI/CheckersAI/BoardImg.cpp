@@ -16,6 +16,11 @@ int destX = -1;
 int destY = -1;
 //used to determine whether or not the computer should move
 bool compMove = false;
+//handles player or computer going again, if they can
+bool playerJump = false;
+bool compJump = false;
+static int jumpX = -1;
+static int jumpY = -1;
 
 //called once at beginning
 //initializes environment
@@ -120,6 +125,21 @@ void render() {
                 moveAnimation(pieceX, pieceY, destX, destY, scale);
             }
 
+            //handles if the player can jump again
+            if (isJump == 1) {
+                //gets the potential moves for the player
+                vector<Move> playerJumps = getJumps(board, destX, destY);
+
+                //if the player can make a jump, it is still their turn, and they have to jump
+                if ((int)playerJumps.size() != 0) {
+                    playerJump = true;
+                    compMove = false;
+                    jumpX = destX;
+                    jumpY = destY;
+                }
+            }
+
+            //resets values
             pieceX = -1;
             pieceY = -1;
             destX = -1;
@@ -128,8 +148,16 @@ void render() {
     }
     //handles computer turn
     if (compMove) {
+        Move move;
+        //handles case where computer is jumping again
+        if (compJump) {
+            move = makeJump(board, jumpX, jumpY);
+            compJump = false;
+        }
         //gets the computer's move
-        Move move = makeMove(board);
+        else {
+            move = makeMove(board);
+        }
 
         //determines whether or not a move is a jump
         int isJump = abs(move.newX - move.oldX) - 1;
@@ -146,6 +174,18 @@ void render() {
             int oppX = ((move.newX - move.oldX) / 2) + move.oldX;
             int oppY = ((move.newY - move.oldY) / 2) + move.oldY;
             moveAnimation(oppX, oppY, move.newX, move.newY, scale);
+
+            //handles if the computer can jump again
+            //gets the potential jumps for the comp
+            vector<Move> compJumps = getJumps(board, move.newX, move.newY);
+
+            //if the comp can make a jump, it is still their turn, and they have to jump
+            if ((int)compJumps.size() != 0) {
+                compJump = true;
+                jumpX = move.newX;
+                jumpY = move.newY;
+                render();
+            }
         }
         //handles regular move
         else {
@@ -154,7 +194,9 @@ void render() {
         }
 
         //make sure comp doesn't move again
-        compMove = false;
+        if (!compJump) {
+            compMove = false;
+        }
     }
 
     glutSwapBuffers();
@@ -166,6 +208,10 @@ void input() {
     bool done = false;
     while (!done) {
         string input;
+        //jump statement
+        if (playerJump) {
+            printf("Must make a jump with piece at (%i, %i) again\n", jumpX, jumpY);
+        }
         printf("Select a piece in the form row_column, where _ indicates a space: ");
         getline(cin, input);
         if (input.length() != 3) {
@@ -178,7 +224,15 @@ void input() {
             pieceX = input[0] - '0';
             pieceY = input[2] - '0';
             if (board.getPiece(pieceX, pieceY) == WHITE || board.getPiece(pieceX, pieceY) == WHITE_KING) {
-                done = true;
+                //handles case where player is jumping again
+                if (playerJump) {
+                    if (pieceX == jumpX && pieceY == jumpY) {
+                        done = true;
+                    }
+                }
+                else {
+                    done = true;
+                }
             }
             else {
                 printf("Invalid Selection: Must select a tile your piece is on\n");
@@ -202,7 +256,17 @@ void input() {
             destX = input[0] - '0';
             destY = input[2] - '0';
             if (board.validMove(pieceX, pieceY, destX, destY)) {
-                done = true;
+                //handles player jumping again
+                if (playerJump) {
+                    int isJump = abs(destX - pieceX) - 1;
+                    if (isJump == 1) {
+                        done = true;
+                        playerJump = false;
+                    }
+                }
+                else {
+                    done = true;
+                }
             }
             else {
                 printf("Invalid Selection: Must select an empty tile\n");

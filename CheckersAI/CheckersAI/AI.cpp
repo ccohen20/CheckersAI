@@ -42,6 +42,43 @@ Move makeMove(Board board) {
 }
 
 
+//returns the best jump for the given piece
+Move makeJump (Board board, int x, int y) {
+
+    //gets potential moves
+    vector<Move> jumps = getJumps(board, x, y);
+
+    //builds the list of values for those moves
+    int values[(int)jumps.size()];
+    for (int i = 0; i < (int)jumps.size(); i++) {
+        Board compMove = board.copyBoard();
+        compMove.movePiece(jumps[i].oldX, jumps[i].oldY, jumps[i].newX, jumps[i].newY);
+        values[i] = getMoveRec(compMove, d, computer);
+    }
+
+    //finds the highest value move
+    int highestVal = values[0];
+    int index = 0;
+    for (int i = 1; i < (int)jumps.size(); i++) {
+        if (values[i] > highestVal) {
+            highestVal = values[i];
+            index = i;
+        }
+        //used to give variety to indifferent moves
+        else if (values[i] == highestVal) {
+            long r = rand() % 2;
+            if (r == 0) {
+                index = i;
+            }
+        }
+    }
+
+    //makes that move
+    return jumps[index];
+
+}
+
+
 //helper function for getMove
 //gets the recursive value of a move, assuming the best move is made each time
 int getMoveRec(Board board, int depth, int side) {
@@ -78,7 +115,7 @@ int getMoveRec(Board board, int depth, int side) {
                 if (r == 0) {
                     index = i;
                 }
-        }
+            }
         }
         
         //updates newBoard with player's move
@@ -169,6 +206,41 @@ vector<Move> getMoves(Board board, int side) {
 
 
             }
+        }
+    }
+
+    return valid;
+}
+
+
+//gets the potential jumps a plyer can make with a given piece
+//gets the potential moves
+vector<Move> getJumps(Board board, int x, int y) {
+
+    //stores jumps
+    vector<Move> valid;
+
+    int count = 0;
+    Move potentialJumps[4];
+
+    //initializes jumps
+    for (int k = -2; k < 3; k += 4) {
+        for (int l = -2; l < 3; l += 4) {
+            Move move;
+            move.oldX = x;
+            move.oldY = y;
+            move.newX = x + k;
+            move.newY = y + l;
+            potentialJumps[count] = move;
+
+            count++;
+        }
+    }
+
+    //determines valid moves and adds them to valid
+    for (int i = 0; i < 4; i++) {
+        if (board.validMove(potentialJumps[i].oldX, potentialJumps[i].oldY, potentialJumps[i].newX, potentialJumps[i].newY)) {
+            valid.push_back(potentialJumps[i]);
         }
     }
 

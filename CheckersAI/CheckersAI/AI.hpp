@@ -12,9 +12,14 @@ typedef struct m {
 } Move;
 
 Move makeMove(Board board);
+Move makeJump(Board board, int x, int y);
 int getMoveRec(Board board, int depth, int side);
 vector<Move> getMoves(Board board, int side);
+vector<Move> getJumps(Board board, int x, int y);
 int scoreBoard(Board board, int side);
 int together(Board board, int x, int y, int side);
+
+extern const int player;
+extern const int computer;
 
 #endif
