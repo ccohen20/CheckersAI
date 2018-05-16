@@ -287,8 +287,15 @@ int scoreBoard(Board board, int side) {
         }
     }
 
+    //more aggressive in endgame
+    int total = black + white;
+    int scale = 2;
+    if (total < 10) {
+        scale = 4;
+    }
+
     //updates score to favor taking pieces
-    score = score + (black - white) * 2;
+    score = score + (black - white) * scale;
 
 
     //counts the number of black and white kings
@@ -307,7 +314,12 @@ int scoreBoard(Board board, int side) {
     }
 
     //double counts kings to favor getting / taking kings
-    score = score + (black - white) * 3;
+    //more aggressive in endgame
+    scale = 3;
+    if (total < 10) {
+        scale = 5;
+    }
+    score = score + (black - white) * scale;
 
     //inverts for player
     if (side == player) {
