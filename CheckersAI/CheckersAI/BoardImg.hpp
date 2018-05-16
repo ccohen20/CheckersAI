@@ -9,6 +9,7 @@
 #include <cctype>
 #include <cmath>
 #include "Board.hpp"
+#include "AI.hpp"
 using namespace std;
 
 void init(int argc, char ** argv);

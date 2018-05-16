@@ -1,8 +1,9 @@
-#include "Board.hpp"
-#include "BoardImg.hpp"
+//#include "Board.hpp"
+//#include "BoardImg.hpp"
+#include "AI.hpp"
 
 int main() {
-    //tests board
+    /*//tests board
     Board board;
 
     //test printboard
@@ -74,5 +75,30 @@ int main() {
     board.movePiece(1, 7, 0, 6);
     
 
+    board.printBoard();*/
+
+    Board board;
+    
     board.printBoard();
+
+    vector<Move> moves = getMoves(board, 0);
+    printf("%lu\n", moves.size());
+
+    //test getMove
+    for (int i = 0; i < (int)moves.size(); i++) {
+        Move move = moves[i];
+        printf("From: %i, %i\nTo: %i, %i\n", move.oldX, move.oldY, move.newX, move.newY);
+    }
+
+    //testsHelper
+    int val = getMoveRec(board, 3, 0);
+    printf("Val: %i\n", val);
+
+    //tests makeMove
+    makeMove(board);
+
+    board.printBoard();
+
+
+
 }

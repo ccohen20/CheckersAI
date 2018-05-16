@@ -1,17 +1,17 @@
-all: Board.o BoardImg
+all: Board.o AI.o BoardImg
 
-FLAGS = -g -Wall -Wextra -g
+FLAGS = -g -Wall -Wextra
 
 OGL = -framework OpenGL -framework GLUT -framework Carbon
 
 BoardImg: BoardImg.cpp BoardImg.hpp
-	g++ $(FLAGS) $(OGL) -o BoardImg BoardImg.cpp Board.o
+	g++ $(FLAGS) $(OGL) -o BoardImg BoardImg.cpp Board.o AI.o
 
 Board.o: Board.cpp Board.hpp Global.hpp
 	g++ $(FLAGS) -c Board.cpp
 
-Test: Board.o
-	g++ $(FLAGS) -o Test Test.cpp Board.o
+AI.o: AI.cpp AI.hpp Board.o
+	g++ $(FLAGS) -c AI.cpp
 
 clean:
-	rm Test BoardImg Board Board.o
+	rm BoardImg Board.o AI.o

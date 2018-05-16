@@ -14,6 +14,8 @@ int pieceX = -1;
 int pieceY = -1;
 int destX = -1;
 int destY = -1;
+//used to determine whether or not the computer should move
+bool compMove = false;
 
 //called once at beginning
 //initializes environment
@@ -63,6 +65,19 @@ void display(void){
 void update() {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
+    //handles game ending
+    vector<Move> playerMoves = getMoves(board, 0);
+    vector<Move> compMoves = getMoves(board, 1);
+    if ((int)playerMoves.size() == 0) {
+        printf("You lose :(\n");
+        exit(0);
+    }
+    else if ((int)compMoves.size() == 0) {
+        printf("You win!! :)\n");
+        exit(0);
+    }
+
+
     glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
     gluLookAt(70.0, 80.0, -80.0, 70.0, 0.0, 50.0, 0.0, 1.2, 1.0);
@@ -80,6 +95,7 @@ void render() {
 
     //updates board
     if (pieceX != -1 && pieceY != -1 && destX != -1 && destY != -1) {
+        //used to determine if the move is a jump
         int isJump = abs(destX - pieceX) - 1;
         if (isJump > 1) {
             printf("Invalid Move: Cannot jump that far\n");
@@ -88,14 +104,18 @@ void render() {
             jumpAnimation(pieceX, pieceY, destX, destY, scale);
         }
 
+        //stores if the move was made
         int moved = board.movePiece(pieceX, pieceY, destX, destY);
 
+        //if the move was made, we handle the move
         if (moved == 0) {
+            //handles second half of jump
             if (isJump == 1) {
                 int oppX = ((destX - pieceX) / 2) + pieceX;
                 int oppY = ((destY - pieceY) / 2) + pieceY;
                 moveAnimation(oppX, oppY, destX, destY, scale);
             }
+            //handles normal move
             else {
                 moveAnimation(pieceX, pieceY, destX, destY, scale);
             }
@@ -105,6 +125,36 @@ void render() {
             destX = -1;
             destY = -1;
         }
+    }
+    //handles computer turn
+    if (compMove) {
+        //gets the computer's move
+        Move move = makeMove(board);
+
+        //determines whether or not a move is a jump
+        int isJump = abs(move.newX - move.oldX) - 1;
+
+        //handles jumping
+        if (isJump == 1) {
+            //handles first part of jump
+            jumpAnimation(move.oldX, move.oldY, move.newX, move.newY, scale);
+
+            //moves piece
+            board.movePiece(move.oldX, move.oldY, move.newX, move.newY);
+
+            //handles rest of animation
+            int oppX = ((move.newX - move.oldX) / 2) + move.oldX;
+            int oppY = ((move.newY - move.oldY) / 2) + move.oldY;
+            moveAnimation(oppX, oppY, move.newX, move.newY, scale);
+        }
+        //handles regular move
+        else {
+            board.movePiece(move.oldX, move.oldY, move.newX, move.newY);
+            moveAnimation(move.oldX, move.oldY, move.newX, move.newY, scale);
+        }
+
+        //make sure comp doesn't move again
+        compMove = false;
     }
 
     glutSwapBuffers();
@@ -127,7 +177,7 @@ void input() {
         else {
             pieceX = input[0] - '0';
             pieceY = input[2] - '0';
-            if (board.getPiece(pieceX, pieceY) != EMPTY) {
+            if (board.getPiece(pieceX, pieceY) == WHITE || board.getPiece(pieceX, pieceY) == WHITE_KING) {
                 done = true;
             }
             else {
@@ -151,7 +201,7 @@ void input() {
         else {
             destX = input[0] - '0';
             destY = input[2] - '0';
-            if (board.getPiece(destX, destY) == EMPTY) {
+            if (board.validMove(pieceX, pieceY, destX, destY)) {
                 done = true;
             }
             else {
@@ -160,6 +210,9 @@ void input() {
         }
         cin.clear();
     }
+
+    compMove = true;
+
     glutPostRedisplay();
 }
 
@@ -292,6 +345,9 @@ void moveAnimation (int oldX, int oldY, int newX, int newY, float scale) {
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
         drawBoard(scale);
 
+        //draws pieces on board
+        drawPieces(newX, newY, scale);
+
         //gets color
         //since we call animation after updating the board, we use the new postion for color
         int piece = board.getPiece(newX, newY);
@@ -309,8 +365,6 @@ void moveAnimation (int oldX, int oldY, int newX, int newY, float scale) {
         else {
             drawPiece(X, Y, 8, scale);
         }
-
-        drawPieces(newX, newY, scale);
 
         X = X + rX;
         Y = Y + rY;

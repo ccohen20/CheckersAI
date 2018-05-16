@@ -132,10 +132,10 @@ void Board::printBoard() {
 bool Board::validMove(int currentX, int currentY, int newX, int newY) {
     
     //handles index out of bounds
-    if (newX < 0 || newX > BOARD_LENGTH - 7) {
+    if (newX < 0 || newX > BOARD_LENGTH - 1) {
         return false;
     }
-    else if (newY < 0 || newY > BOARD_LENGTH - 7) {
+    else if (newY < 0 || newY > BOARD_LENGTH - 1) {
         return false;
     }
 
