@@ -130,9 +130,31 @@ int getMoveRec(Board board, int depth, int side) {
         for (int i = 0; i < (int)moves.size(); i++) {
             Board compMove = newBoard.copyBoard();
             compMove.movePiece(moves[i].oldX, moves[i].oldY, moves[i].newX, moves[i].newY);
-            int newVal = getMoveRec(compMove, depth - 1, side);
-            if (value < newVal) {
-                value = newVal;
+
+            vector<Move> jumps = getJumps(compMove, moves[i].newX, moves[i].newY);
+            int isJump = abs(moves[i].newX - moves[i].oldX) - 1;
+            //handles jumping case
+            if ((int)jumps.size() != 0 && isJump == 1) {
+
+                for (int j = 0; j < (int)jumps.size(); j++) {
+                    Move jump = jumps[j];
+                    Board newTemp = compMove.copyBoard();
+                    newTemp.movePiece(jump.oldX, jump.oldY, jump.newX, jump.newY);
+
+                    //min
+                    int moveVal = getMoveRec(newTemp, depth-1, player);
+                    //maximizing worst outcomes
+                    if(moveVal > value){
+                        value = moveVal;
+                    }
+                }
+            }
+            //handles regular case
+            else {
+                int newVal = getMoveRec(compMove, depth - 1, side);
+                if (value < newVal) {
+                    value = newVal;
+                }
             }
         }
 

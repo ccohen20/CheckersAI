@@ -22,11 +22,33 @@ int minmax(Board b, int depth, int bot){
                 Board temp = b.copyBoard();
 
                 temp.movePiece(move.oldX,move.oldY,move.newX,move.newY);
-                //min
-                int moveVal = minmax(temp, depth-1, player);
-                //maximizing worst outcomes
-                if(moveVal > bestVal){
-                    bestVal = moveVal;
+
+                vector<Move> jumps = getJumps(temp, move.newX, move.newY);
+                int isJump = abs(move.newX - move.oldX) - 1;
+                //handles jumping case
+                if ((int)jumps.size() != 0 && isJump == 1) {
+
+                    for (int j = 0; j < (int)jumps.size(); j++) {
+                        Move jump = jumps[j];
+                        Board newTemp = temp.copyBoard();
+                        newTemp.movePiece(jump.oldX, jump.oldY, jump.newX, jump.newY);
+
+                        //min
+                        int moveVal = minmax(newTemp, depth-1, player);
+                        //maximizing worst outcomes
+                        if(moveVal > bestVal){
+                            bestVal = moveVal;
+                        }
+                    }
+                }
+                //case where board can not jump anymore
+                else {
+                    //min
+                    int moveVal = minmax(temp, depth-1, player);
+                    //maximizing worst outcomes
+                    if(moveVal > bestVal){
+                        bestVal = moveVal;
+                    }
                 }
             }
             return bestVal;
@@ -47,11 +69,32 @@ int minmax(Board b, int depth, int bot){
                 Board temp = b.copyBoard();
 
                 temp.movePiece(move.oldX,move.oldY,move.newX,move.newY);
-                //min
-                int moveVal = minmax(temp, depth-1, computer);
-                //minimizing best outcomes
-                if(moveVal < bestVal){
-                    bestVal = moveVal;
+
+                vector<Move> jumps = getJumps(temp, move.newX, move.newY);
+                //handles jumping case
+                int isJump = abs(move.newX - move.oldX) - 1;
+                if ((int)jumps.size() != 0 && isJump == 1) {
+
+                    for (int j = 0; j < (int)jumps.size(); j++) {
+                        Move jump = jumps[j];
+                        Board newTemp = temp.copyBoard();
+                        newTemp.movePiece(jump.oldX, jump.oldY, jump.newX, jump.newY);
+
+                        //min
+                        int moveVal = minmax(newTemp, depth-1, computer);
+                        //maximizing worst outcomes
+                        if(moveVal < bestVal){
+                            bestVal = moveVal;
+                        }
+                    }
+                }
+                else {
+                    //min
+                    int moveVal = minmax(temp, depth-1, computer);
+                    //minimizing best outcomes
+                    if(moveVal < bestVal){
+                        bestVal = moveVal;
+                    }
                 }
             }
             return bestVal;
