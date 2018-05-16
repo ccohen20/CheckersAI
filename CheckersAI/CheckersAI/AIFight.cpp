@@ -167,11 +167,8 @@ void render() {
             }
             //gets the computer's move
             else {
-<<<<<<< HEAD
-            
-=======
-                move = search(board, d, computer);
->>>>>>> a6febd8d3a4a84bbae7467996732fed71e83c50d
+
+                move = search(board, 6, computer);
             }
 
             //determines whether or not a move is a jump
