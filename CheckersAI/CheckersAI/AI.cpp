@@ -142,7 +142,7 @@ int getMoveRec(Board board, int depth, int side) {
                     newTemp.movePiece(jump.oldX, jump.oldY, jump.newX, jump.newY);
 
                     //min
-                    int moveVal = getMoveRec(newTemp, depth-1, player);
+                    int moveVal = getMoveRec(newTemp, depth-1, side);
                     //maximizing worst outcomes
                     if(moveVal > value){
                         value = moveVal;
@@ -421,11 +421,11 @@ int together(Board board, int x, int y, int side) {
     if (side == player) {
         //evaluates right side
         if (!rWall) {
-            if (board.getPiece(x + 1, y - 1) == BLACK || board.getPiece(x + 1, y - 1) == BLACK_KING) {
+            if (board.getPiece(x + 1, y - 1) == WHITE || board.getPiece(x + 1, y - 1) == WHITE_KING) {
                 behind += 2;
             }
             //negative if a king is behind you
-            else if (board.getPiece(x + 1, y - 1) == WHITE_KING) {
+            else if (board.getPiece(x + 1, y - 1) == BLACK_KING) {
                 behind -= 1;
             }
         }
@@ -435,11 +435,11 @@ int together(Board board, int x, int y, int side) {
         }
         //left side
         if (!lWall) {
-            if (board.getPiece(x - 1, y - 1) == BLACK || board.getPiece(x + 1, y - 1) == BLACK_KING) {
+            if (board.getPiece(x - 1, y - 1) == WHITE || board.getPiece(x + 1, y - 1) == WHITE_KING) {
                 behind += 2;
             }
             //negative if a king is behind you
-            else if (board.getPiece(x - 1, y - 1) == WHITE_KING) {
+            else if (board.getPiece(x - 1, y - 1) == BLACK_KING) {
                 behind -= 1;
             }
         }

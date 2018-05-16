@@ -156,7 +156,7 @@ void render() {
         }
         //gets the computer's move
         else {
-            move = search(board, depth, 1);
+            move = search(board, depth, computer);
         }
 
         //determines whether or not a move is a jump
