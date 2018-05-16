@@ -311,9 +311,9 @@ int scoreBoard(Board board, int side) {
 
     //more aggressive in endgame
     int total = black + white;
-    int diff = black - white;
+    //int diff = black - white;
     int scale = 2;
-    if ((diff > 0) || (total < 10) {
+    if(total < 10) {
         scale = 4;
     }
 
@@ -338,9 +338,9 @@ int scoreBoard(Board board, int side) {
 
     //double counts kings to favor getting / taking kings
     //more aggressive in endgame
-    diff = black - white;
+    //diff = black - white;
     scale = 3;
-    if ((diff > 0) || (total < 10) {
+    if (total < 10) {
         scale = 5;
     }
     score = score + (black - white) * scale;
