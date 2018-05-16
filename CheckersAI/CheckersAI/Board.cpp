@@ -130,7 +130,7 @@ void Board::printBoard() {
 //checks if a given move is valid
 //returns 0 on valid, 1 on square occupied, and 2 on move/direction not allowed
 bool Board::validMove(int currentX, int currentY, int newX, int newY) {
-    
+
     //handles index out of bounds
     if (newX < 0 || newX > BOARD_LENGTH - 1) {
         return false;
