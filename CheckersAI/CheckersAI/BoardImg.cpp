@@ -21,6 +21,7 @@ bool playerJump = false;
 bool compJump = false;
 static int jumpX = -1;
 static int jumpY = -1;
+const static int depth = 6;
 
 //called once at beginning
 //initializes environment
@@ -150,12 +151,12 @@ void render() {
         Move move;
         //handles case where computer is jumping again
         if (compJump) {
-            move = searchJump(board, d, jumpX, jumpY);
+            move = searchJump(board, depth, jumpX, jumpY);
             compJump = false;
         }
         //gets the computer's move
         else {
-            move = search(board, d, 1);
+            move = search(board, depth, 1);
         }
 
         //determines whether or not a move is a jump
