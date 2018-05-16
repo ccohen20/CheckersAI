@@ -14,7 +14,7 @@ int minmax(Board b, int depth, int bot){
             return scoreBoard(b,1);
         } 
         else {
-            vector<Move> moves = getMoves(b,0);
+            vector<Move> moves = getMoves(b,1);
             int size = moves.size();
             int bestVal = BIGNEG;
             for(int i = 0; i < size; i++){
@@ -39,7 +39,7 @@ int minmax(Board b, int depth, int bot){
             return scoreBoard(b,1);
         } 
         else {
-            vector<Move> moves = getMoves(b,1);
+            vector<Move> moves = getMoves(b,0);
             int size = moves.size();
             int bestVal = BIGPOS;
             for(int i = 0; i < size; i++){
@@ -62,17 +62,15 @@ int minmax(Board b, int depth, int bot){
 
 Move search(Board b, int depth, int bot){
 
-   
-    
-    vector<Move> moves;
-    moves = getMoves(b,bot);
-
     Move bestMove;
     int bestVal;
 
-    int size = moves.size();
 
     if(bot){
+        vector<Move> moves;
+        moves = getMoves(b,bot);
+        int size = moves.size();
+
         bestVal = BIGNEG;
         for(int i = 0; i < size; i++){
             Move move = moves[i];
@@ -91,6 +89,11 @@ Move search(Board b, int depth, int bot){
         return bestMove;
     } else {
         //player
+        vector<Move> moves;
+        moves = getMoves(b,0);
+        int size = moves.size();
+
+
         bestVal = BIGPOS;
         for(int i = 0; i < size; i++){
             Move move = moves[i];
