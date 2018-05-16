@@ -34,6 +34,7 @@ Move search(Board board, int depth, int bot){
                 bestMove = move;
             }
         }
+        return bestMove;
     } else {
         //player
         bestVal = BIGPOS;
@@ -50,7 +51,7 @@ Move search(Board board, int depth, int bot){
                 bestMove = move;
             }
         }
-
+        return bestMove;
     }
     }
 
