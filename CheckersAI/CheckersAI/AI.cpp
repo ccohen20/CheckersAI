@@ -6,17 +6,17 @@ const int d = 3;
 
 
 //makes the best move for the computer
-Move makeMove(Board board) {
+Move makeMove(Board board, int side) {
 
     //gets the potential moves
-    vector<Move> moves = getMoves(board, computer);
+    vector<Move> moves = getMoves(board, side);
 
     //builds the list of values for those moves
     int values[(int)moves.size()];
     for (int i = 0; i < (int)moves.size(); i++) {
         Board compMove = board.copyBoard();
         compMove.movePiece(moves[i].oldX, moves[i].oldY, moves[i].newX, moves[i].newY);
-        values[i] = getMoveRec(compMove, d, computer);
+        values[i] = getMoveRec(compMove, d, side);
     }
 
     //finds the highest value move
@@ -43,7 +43,7 @@ Move makeMove(Board board) {
 
 
 //returns the best jump for the given piece
-Move makeJump (Board board, int x, int y) {
+Move makeJump (Board board, int x, int y, int side) {
 
     //gets potential moves
     vector<Move> jumps = getJumps(board, x, y);
@@ -53,7 +53,7 @@ Move makeJump (Board board, int x, int y) {
     for (int i = 0; i < (int)jumps.size(); i++) {
         Board compMove = board.copyBoard();
         compMove.movePiece(jumps[i].oldX, jumps[i].oldY, jumps[i].newX, jumps[i].newY);
-        values[i] = getMoveRec(compMove, d, computer);
+        values[i] = getMoveRec(compMove, d, side);
     }
 
     //finds the highest value move
@@ -82,6 +82,7 @@ Move makeJump (Board board, int x, int y) {
 //helper function for getMove
 //gets the recursive value of a move, assuming the best move is made each time
 int getMoveRec(Board board, int depth, int side) {
+    int opp = (side + 1) % 2;
     //base case
     if (depth == 0) {
         return scoreBoard(board, side);
@@ -91,14 +92,14 @@ int getMoveRec(Board board, int depth, int side) {
         Board newBoard = board.copyBoard();
 
         //gets the player's best immidiate move
-        vector<Move> playerMoves = getMoves(newBoard, player);
+        vector<Move> playerMoves = getMoves(newBoard, opp);
         
         //builds list of values for player's moves
         int values[(int)playerMoves.size()];
         for (int i = 0; i < (int)playerMoves.size(); i++) {
             Board playerMove = board.copyBoard();
             playerMove.movePiece(playerMoves[i].oldX, playerMoves[i].oldY, playerMoves[i].newX, playerMoves[i].newY);
-            values[i] = getMoveRec(playerMove, 0, player);
+            values[i] = getMoveRec(playerMove, 0, opp);
         }
 
         //finds the highest value move
@@ -122,7 +123,7 @@ int getMoveRec(Board board, int depth, int side) {
         newBoard.movePiece(playerMoves[index].oldX, playerMoves[index].oldY, playerMoves[index].newX, playerMoves[index].newY);
 
         //gets the computers potential moves
-        vector<Move> moves = getMoves(newBoard, computer);
+        vector<Move> moves = getMoves(newBoard, side);
 
         //returns the greatest valued move
         int value = INT_MIN;

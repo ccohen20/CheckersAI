@@ -11,8 +11,8 @@ typedef struct m {
     int newY;
 } Move;
 
-Move makeMove(Board board);
-Move makeJump(Board board, int x, int y);
+Move makeMove(Board board, int side);
+Move makeJump(Board board, int x, int y, int side);
 int getMoveRec(Board board, int depth, int side);
 vector<Move> getMoves(Board board, int side);
 vector<Move> getJumps(Board board, int x, int y);
