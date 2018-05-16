@@ -2,7 +2,7 @@
 
 const int player = 0;
 const int computer = 1;
-const int d = 3;
+const int d = 4;
 
 
 //makes the best move for the computer

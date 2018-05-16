@@ -66,7 +66,6 @@ void display(void){
 }
 
 //updates any logic before rendering
-    //includes moving pieces, and awarding king values
 void update() {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
@@ -151,12 +150,12 @@ void render() {
         Move move;
         //handles case where computer is jumping again
         if (compJump) {
-            move = searchJump(board, 3, jumpX, jumpY);
+            move = searchJump(board, d, jumpX, jumpY);
             compJump = false;
         }
         //gets the computer's move
         else {
-            move = search(board, 3, 1);
+            move = search(board, d, 1);
         }
 
         //determines whether or not a move is a jump
@@ -204,6 +203,17 @@ void render() {
 
 //gets user input
 void input() {
+    //handles end game
+    vector<Move> playerMoves = getMoves(board, 0);
+    vector<Move> compMoves = getMoves(board, 1);
+    if ((int)playerMoves.size() == 0) {
+        printf("You lose :(\n");
+        exit(0);
+    }
+    else if ((int)compMoves.size() == 0) {
+        printf("You win!! :)\n");
+        exit(0);
+    }
     //handles selecting the piece
     bool done = false;
     while (!done) {

@@ -36,7 +36,7 @@ int minmax(Board b, int depth, int bot){
     else {
         //basecase
         if(depth==0){
-            return scoreBoard(b,player);
+            return scoreBoard(b,computer);
         } 
         else {
             vector<Move> moves = getMoves(b,player);
