@@ -162,12 +162,16 @@ void render() {
             Move move;
             //handles case where computer is jumping again
             if (compJump) {
-                move = searchJump(board, 3, jumpX, jumpY);
+                move = searchJump(board, d, jumpX, jumpY);
                 compJump = false;
             }
             //gets the computer's move
             else {
-                move = search(board, 6, 1);
+<<<<<<< HEAD
+            
+=======
+                move = search(board, d, computer);
+>>>>>>> a6febd8d3a4a84bbae7467996732fed71e83c50d
             }
 
             //determines whether or not a move is a jump

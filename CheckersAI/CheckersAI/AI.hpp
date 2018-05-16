@@ -21,5 +21,6 @@ int together(Board board, int x, int y, int side);
 
 extern const int player;
 extern const int computer;
+extern const int d;
 
 #endif
