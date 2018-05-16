@@ -313,7 +313,7 @@ int scoreBoard(Board board, int side) {
     int total = black + white;
     int diff = black - white;
     int scale = 2;
-    if (diff > 0) {
+    if ((diff > 0) || (total < 10) {
         scale = 4;
     }
 
@@ -340,7 +340,7 @@ int scoreBoard(Board board, int side) {
     //more aggressive in endgame
     diff = black - white;
     scale = 3;
-    if (diff > 0) {
+    if ((diff > 0) || (total < 10) {
         scale = 5;
     }
     score = score + (black - white) * scale;
