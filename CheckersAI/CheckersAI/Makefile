@@ -14,7 +14,7 @@ AI.o: AI.cpp AI.hpp Board.o
 	g++ $(FLAGS) -c AI.cpp
 
 search.o: search.cpp search.hpp Board.hpp
-	g++ $(FLAGS) -c search.cpp Board.o AI.o
+	g++ $(FLAGS) -c search.cpp
 
 clean:
-	rm BoardImg Board.o AI.o
+	rm BoardImg Board.o AI.o search.o
