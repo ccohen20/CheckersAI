@@ -1,9 +1,9 @@
 #ifndef BOARDIMG_H
 #define BOARDIMG_H
 
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/freeglut.h>
 #include <iostream>
 #include <string>
 #include <cctype>

@@ -4,11 +4,13 @@ FLAGS = -g -Wall -Wextra
 
 OGL = -framework OpenGL -framework GLUT -framework Carbon
 
+GLLINUX = -lpthread -lGL -lGLU -lglut
+
 BoardImg: BoardImg.cpp BoardImg.hpp
-	g++ $(FLAGS) $(OGL) -o BoardImg BoardImg.cpp Board.o AI.o search.o
+	g++ $(FLAGS) -o BoardImg BoardImg.cpp Board.o AI.o search.o $(GLLINUX) 
 
 AIFight: AIFight.cpp AIFight.hpp
-	g++ $(FLAGS) $(OGL) -o AIFight AIFight.cpp Board.o AI.o search.o
+	g++ $(FLAGS) -o AIFight AIFight.cpp Board.o AI.o search.o $(GLLINUX)
 
 Board.o: Board.cpp Board.hpp Global.hpp
 	g++ $(FLAGS) -c Board.cpp

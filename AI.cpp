@@ -93,34 +93,38 @@ int getMoveRec(Board board, int depth, int side) {
 
         //gets the player's best immidiate move
         vector<Move> playerMoves = getMoves(newBoard, opp);
-        
-        //builds list of values for player's moves
-        int values[(int)playerMoves.size()];
-        for (int i = 0; i < (int)playerMoves.size(); i++) {
-            Board playerMove = board.copyBoard();
-            playerMove.movePiece(playerMoves[i].oldX, playerMoves[i].oldY, playerMoves[i].newX, playerMoves[i].newY);
-            values[i] = getMoveRec(playerMove, 0, opp);
-        }
 
-        //finds the highest value move
-        int highestVal = values[0];
-        int index = 0;
-        for (int i = 1; i < (int)playerMoves.size(); i++) {
-            if (values[i] > highestVal) {
-                highestVal = values[i];
-                index = i;
+        //if the player can make a move, find their best move and make it
+        if (playerMoves.size() != 0) {
+            //builds list of values for player's moves
+            int values[(int)playerMoves.size()];
+            for (int i = 0; i < (int)playerMoves.size(); i++) {
+                Board playerMove = board.copyBoard();
+                playerMove.movePiece(playerMoves[i].oldX, playerMoves[i].oldY, playerMoves[i].newX, playerMoves[i].newY);
+                values[i] = getMoveRec(playerMove, 0, opp);
             }
-            //used to give variety to indifferent moves
-            else if (values[i] == highestVal) {
-                long r = rand() % 2;
-                if (r == 0) {
+
+            //finds the highest value move
+            int highestVal = values[0];
+            int index = 0;
+            for (int i = 1; i < (int)playerMoves.size(); i++) {
+                if (values[i] > highestVal) {
+                    highestVal = values[i];
                     index = i;
                 }
+                //used to give variety to indifferent moves
+                else if (values[i] == highestVal) {
+                    long r = rand() % 2;
+                    if (r == 0) {
+                        index = i;
+                    }
+                }
             }
+            
+            //updates newBoard with player's move
+            newBoard.movePiece(playerMoves[index].oldX, playerMoves[index].oldY, playerMoves[index].newX, playerMoves[index].newY);
         }
-        
-        //updates newBoard with player's move
-        newBoard.movePiece(playerMoves[index].oldX, playerMoves[index].oldY, playerMoves[index].newX, playerMoves[index].newY);
+        //if the player can't move, just evaluate the current board, so we leave newboard unchanged
 
         //gets the computers potential moves
         vector<Move> moves = getMoves(newBoard, side);

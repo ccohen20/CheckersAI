@@ -106,7 +106,7 @@ void render() {
     if (!first) {
         //updates for player AI
         if (playerMove) {
-            printf("Player turn\n\n");
+
             Move move;
             //handles case where computer is jumping again
             if (playerJump) {
@@ -128,7 +128,6 @@ void render() {
 
                 //moves piece
                 board.movePiece(move.oldX, move.oldY, move.newX, move.newY);
-                printf("%i\n", scoreBoard(board, player));
 
                 //handles rest of animation
                 int oppX = ((move.newX - move.oldX) / 2) + move.oldX;
@@ -150,7 +149,7 @@ void render() {
             //handles regular move
             else {
                 board.movePiece(move.oldX, move.oldY, move.newX, move.newY);
-                printf("%i\n", scoreBoard(board, player));
+
                 moveAnimation(move.oldX, move.oldY, move.newX, move.newY, scale);
             }
 
@@ -162,7 +161,7 @@ void render() {
         }
         //handles computer turn
         if (compMove) {
-            printf("CPU Move\n\n");
+
             Move move;
             //handles case where computer is jumping again
             if (compJump) {

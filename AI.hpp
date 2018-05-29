@@ -3,6 +3,7 @@
 
 #include "Board.hpp"
 #include <cstdlib>
+#include <limits.h>
 
 typedef struct m {
     int oldX;
